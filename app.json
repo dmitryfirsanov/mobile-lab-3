@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "mobile-lab-3",
-    "slug": "mobile-lab-3",
+    "slug": "task3",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -37,6 +37,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "d839972c-3053-44c5-8923-b65297c297d7"
+      }
+    },
+    "owner": "kizami"
   }
 }
