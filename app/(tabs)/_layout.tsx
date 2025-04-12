@@ -1,45 +1,69 @@
-import { Tabs } from 'expo-router';
-import React from 'react';
-import { Platform } from 'react-native';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Link, Tabs } from 'expo-router';
+import { Pressable, Linking } from 'react-native';
 
-import { HapticTab } from '@/components/HapticTab';
-import { IconSymbol } from '@/components/ui/IconSymbol';
-import TabBarBackground from '@/components/ui/TabBarBackground';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Colors } from '../../constants/Colors';
+import { useColorScheme } from '../../components/useColorScheme';
+import { useClientOnlyValue } from '../../components/useClientOnlyValue';
+
+function TabBarIcon(props: {
+  name: React.ComponentProps<typeof FontAwesome>['name'];
+  color: string;
+}) {
+  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+}
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
+  // Функция для открытия сайта КГУ
+  const openKSUWebsite = () => {
+    Linking.openURL('https://kursksu.ru/');
+  };
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false,
-        tabBarButton: HapticTab,
-        tabBarBackground: TabBarBackground,
-        tabBarStyle: Platform.select({
-          ios: {
-            // Use a transparent background on iOS to show the blur effect
-            position: 'absolute',
-          },
-          default: {},
-        }),
+        tabBarActiveTintColor: Colors[colorScheme].tint,
+        // Отключение заголовка для экранов в таб-навигаторе
+        headerShown: useClientOnlyValue(false, true),
       }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="house.fill" color={color} />,
+          title: 'Расписание',
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="calendar" color={color} />,
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="add-schedule"
         options={{
-          title: 'Explore',
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="paperplane.fill" color={color} />,
+          title: 'Добавить',
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="plus-circle" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: 'Профиль',
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="user" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="ksu-link"
+        options={{
+          title: 'КГУ',
+          tabBarIcon: ({ color }: { color: string }) => <TabBarIcon name="university" color={color} />,
+        }}
+        listeners={{
+          tabPress: (e: { preventDefault: () => void }) => {
+            // Предотвращаем стандартное поведение навигации
+            e.preventDefault();
+            // Открываем сайт КГУ
+            openKSUWebsite();
+          },
         }}
       />
     </Tabs>
   );
-}
+} 
