@@ -5,7 +5,6 @@ import { router } from 'expo-router';
 import { scheduleService } from '../../services/scheduleService';
 import { debugQueryAllTables } from '../../services/databaseService';
 
-// Список дней недели
 const WEEKDAYS = [
   'Понедельник', 
   'Вторник', 
@@ -16,7 +15,6 @@ const WEEKDAYS = [
   'Воскресенье'
 ];
 
-// Короткие формы дней недели
 const WEEKDAY_SHORTS = {
   'Понедельник': 'Пн', 
   'Вторник': 'Вт', 
@@ -27,7 +25,6 @@ const WEEKDAY_SHORTS = {
   'Воскресенье': 'Вс'
 };
 
-// Типы занятий
 const LESSON_TYPES = ['Лекция', 'Практика'];
 
 export default function AddSchedulePage() {
@@ -53,14 +50,12 @@ export default function AddSchedulePage() {
   };
 
   const saveScheduleItem = async () => {
-    // Проверка заполнения всех полей
     if (!scheduleItem.startTime || !scheduleItem.endTime || !scheduleItem.subject || 
         !scheduleItem.teacherName || !scheduleItem.dayOfWeek || !scheduleItem.lessonType) {
       Alert.alert('Ошибка', 'Пожалуйста, заполните все поля');
       return;
     }
 
-    // Проверка формата времени
     const timeRegex = /^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/;
     if (!timeRegex.test(scheduleItem.startTime) || !timeRegex.test(scheduleItem.endTime)) {
       Alert.alert('Ошибка', 'Введите время в формате ЧЧ:ММ (например, 09:30)');
@@ -73,7 +68,6 @@ export default function AddSchedulePage() {
       const timeString = formatTimeForStorage();
       console.log('Сохранение элемента расписания:', { ...scheduleItem, time: timeString });
       
-      // Сохраняем данные с помощью сервиса
       const savedItem = await scheduleService.add({
         time: timeString,
         subject: scheduleItem.subject,
@@ -83,10 +77,8 @@ export default function AddSchedulePage() {
       });
       console.log('Элемент успешно сохранен:', savedItem);
       
-      // Отладочный запрос к БД для проверки
       await debugQueryAllTables();
       
-      // Очистка формы после сохранения
       setScheduleItem({
         startTime: '',
         endTime: '',
@@ -96,7 +88,6 @@ export default function AddSchedulePage() {
         lessonType: '',
       });
 
-      // Переход на страницу расписания
       Alert.alert('Успешно', 'Занятие добавлено в расписание', [
         { text: 'OK', onPress: () => router.navigate('/') }
       ]);

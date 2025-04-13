@@ -2,16 +2,13 @@ import * as SQLite from 'expo-sqlite';
 
 let db: SQLite.SQLiteDatabase;
 
-// Инициализация базы данных с использованием современного API
 export const initDatabase = async (): Promise<void> => {
   console.log('Инициализация базы данных...');
 
   try {
-    // Открываем базу данных с использованием асинхронного API
     db = await SQLite.openDatabaseAsync('student_schedule.db');
     console.log('База данных успешно открыта');
 
-    // Создаем таблицы
     await db.execAsync(`
       CREATE TABLE IF NOT EXISTS profile (
         id INTEGER PRIMARY KEY NOT NULL,
@@ -33,23 +30,19 @@ export const initDatabase = async (): Promise<void> => {
       );
     `);
 
-    // Проверка наличия столбца lessonType
     try {
       await executeQuery('SELECT lessonType FROM schedule_items LIMIT 1');
     } catch (err) {
-      // Если столбец не существует, добавляем его
       console.log('Добавление столбца lessonType в таблицу schedule_items');
       await db.execAsync('ALTER TABLE schedule_items ADD COLUMN lessonType TEXT');
     }
 
     console.log('Таблицы созданы или уже существуют');
     
-    // Проверяем количество элементов в таблице
     const result = await db.getFirstAsync<{ count: number }>('SELECT COUNT(*) as count FROM schedule_items');
     const count = result?.count || 0;
     console.log(`В таблице расписания уже есть ${count} элементов`);
     
-    // Если таблица пуста, добавляем тестовые данные
     if (count === 0) {
       console.log('Добавляем тестовые данные...');
       await createTestData();
@@ -62,7 +55,6 @@ export const initDatabase = async (): Promise<void> => {
   }
 };
 
-// Выполнение SQL запроса с возвратом всех строк результата
 export const executeQuery = async <T>(sql: string, params: any[] = []): Promise<T[]> => {
   if (!db) {
     throw new Error('База данных не инициализирована');
@@ -80,7 +72,6 @@ export const executeQuery = async <T>(sql: string, params: any[] = []): Promise<
   }
 };
 
-// Выполнение SQL запроса для вставки/обновления/удаления
 export const executeUpdate = async (sql: string, params: any[] = []): Promise<{ lastInsertRowId: number, changes: number }> => {
   if (!db) {
     throw new Error('База данных не инициализирована');
@@ -101,24 +92,20 @@ export const executeUpdate = async (sql: string, params: any[] = []): Promise<{ 
   }
 };
 
-// Прямой запрос к базе данных для отладки
 export const debugQueryAllTables = async (): Promise<void> => {
   try {
     console.log("=== Отладочная информация о таблицах ===");
     
-    // Получаем список всех таблиц
     const tables = await executeQuery<{ name: string }>(
       "SELECT name FROM sqlite_master WHERE type='table'"
     );
     console.log("Таблицы в базе данных:", tables.map(t => t.name).join(", "));
     
-    // Получаем данные из таблицы расписания
     const scheduleItems = await executeQuery(
       "SELECT * FROM schedule_items"
     );
     console.log("Данные в таблице schedule_items:", JSON.stringify(scheduleItems));
     
-    // Получаем данные из таблицы профиля
     const profiles = await executeQuery(
       "SELECT * FROM profile"
     );
@@ -130,10 +117,8 @@ export const debugQueryAllTables = async (): Promise<void> => {
   }
 };
 
-// Временная таблица для тестирования, если основная не работает
 const createTestData = async () => {
   try {
-    // Добавляем тестовые данные
     await executeUpdate(`
       INSERT INTO schedule_items (time, subject, teacherName, dayOfWeek, lessonType, createdAt)
       VALUES 
@@ -158,4 +143,4 @@ const createTestData = async () => {
   }
 };
 
-export const getDatabase = () => db; 
+export const getDatabase = () => db;

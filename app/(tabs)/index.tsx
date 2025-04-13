@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useCallback } from 'react';
 import { StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { Text, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
@@ -9,14 +9,12 @@ export default function SchedulePage() {
   const [scheduleItems, setScheduleItems] = useState<ScheduleItem[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Загрузка расписания при фокусе на экране
   useFocusEffect(
     useCallback(() => {
       loadSchedule();
     }, [])
   );
 
-  // Функция загрузки расписания
   const loadSchedule = async () => {
     setLoading(true);
     try {
@@ -31,11 +29,9 @@ export default function SchedulePage() {
     }
   };
 
-  // Удаление элемента расписания
   const handleDelete = async (id: number) => {
     try {
       await scheduleService.remove(id);
-      // Обновляем список после удаления
       setScheduleItems(prevItems => prevItems.filter(item => item.id !== id));
     } catch (error) {
       console.error('Ошибка при удалении элемента расписания:', error);
@@ -43,7 +39,6 @@ export default function SchedulePage() {
     }
   };
 
-  // Рендер элемента расписания
   const renderScheduleItem = ({ item }: { item: ScheduleItem }) => {
     console.log('Отрисовка элемента:', item);
     return (
@@ -79,7 +74,6 @@ export default function SchedulePage() {
     );
   };
 
-  // Если данные загружаются
   if (loading) {
     return (
       <View style={styles.container}>
@@ -88,7 +82,6 @@ export default function SchedulePage() {
     );
   }
 
-  // Если расписание пустое
   if (scheduleItems.length === 0) {
     return (
       <View style={styles.container}>
@@ -107,7 +100,6 @@ export default function SchedulePage() {
 
   console.log('Отображение расписания с элементами:', scheduleItems.length);
 
-  // Если есть элементы расписания
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Расписание заданий</Text>
@@ -168,7 +160,7 @@ const styles = StyleSheet.create({
   },
   scheduleList: {
     width: '100%',
-    paddingBottom: 80, // Отступ для плавающей кнопки
+    paddingBottom: 80,
   },
   scheduleCard: {
     backgroundColor: 'white',

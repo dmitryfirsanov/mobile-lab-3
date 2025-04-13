@@ -14,12 +14,10 @@ export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Загрузка данных профиля при монтировании компонента
   useEffect(() => {
     loadUserProfile();
   }, []);
 
-  // Функция загрузки профиля пользователя
   const loadUserProfile = async () => {
     setIsLoading(true);
     try {
@@ -61,7 +59,6 @@ export default function ProfilePage() {
     }
   };
 
-  // Если данные загружаются
   if (isLoading) {
     return (
       <View style={styles.container}>

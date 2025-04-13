@@ -1,6 +1,5 @@
 import { executeQuery, executeUpdate } from './databaseService';
 
-// Порядок дней недели для сортировки
 const WEEKDAY_ORDER = {
   'Понедельник': 1,
   'Вторник': 2,
@@ -22,16 +21,13 @@ export type ScheduleItem = {
 };
 
 export const scheduleService = {
-  // Получить все элементы расписания, отсортированные по дню недели и времени
   getAll: async (): Promise<ScheduleItem[]> => {
     try {
       const items = await executeQuery<ScheduleItem>(
         'SELECT * FROM schedule_items'
       );
       
-      // Сортировка по дням недели и времени
       return items.sort((a, b) => {
-        // Сортировка по дням недели
         const dayOrderA = WEEKDAY_ORDER[a.dayOfWeek as keyof typeof WEEKDAY_ORDER] || 0;
         const dayOrderB = WEEKDAY_ORDER[b.dayOfWeek as keyof typeof WEEKDAY_ORDER] || 0;
         
@@ -39,7 +35,6 @@ export const scheduleService = {
           return dayOrderA - dayOrderB;
         }
         
-        // Сортировка по времени (берем время начала занятия)
         const startTimeA = a.time.split('-')[0] || '';
         const startTimeB = b.time.split('-')[0] || '';
         
@@ -51,7 +46,6 @@ export const scheduleService = {
     }
   },
 
-  // Добавить новый элемент расписания
   add: async (item: Omit<ScheduleItem, 'id' | 'createdAt'>): Promise<ScheduleItem> => {
     try {
       const createdAt = new Date().toISOString();
@@ -72,7 +66,6 @@ export const scheduleService = {
     }
   },
 
-  // Удалить элемент расписания по ID
   remove: async (id: number): Promise<void> => {
     try {
       await executeUpdate(
@@ -85,7 +78,6 @@ export const scheduleService = {
     }
   },
 
-  // Очистить всё расписание
   clear: async (): Promise<void> => {
     try {
       await executeUpdate('DELETE FROM schedule_items');
@@ -94,4 +86,4 @@ export const scheduleService = {
       throw new Error('Не удалось очистить расписание');
     }
   }
-}; 
+};

@@ -12,16 +12,13 @@ import { useColorScheme } from '../components/useColorScheme';
 import { initDatabase } from '../services/databaseService';
 
 export {
-  // Catch any errors thrown by the Layout component.
   ErrorBoundary,
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -32,7 +29,6 @@ export default function RootLayout() {
   const [dbInitialized, setDbInitialized] = useState(false);
   const [dbError, setDbError] = useState<Error | null>(null);
 
-  // Инициализация базы данных
   useEffect(() => {
     async function initApp() {
       try {
@@ -47,7 +43,6 @@ export default function RootLayout() {
     initApp();
   }, []);
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -59,7 +54,7 @@ export default function RootLayout() {
   }, [loaded, dbInitialized]);
 
   if (!loaded || !dbInitialized) {
-    return null; // Здесь SplashScreen будет отображаться благодаря preventAutoHideAsync()
+    return null;
   }
 
   if (dbError) {

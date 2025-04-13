@@ -1,6 +1,6 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable, Linking } from 'react-native';
+import { Tabs } from 'expo-router';
+import { Linking } from 'react-native';
 
 import { Colors } from '../../constants/Colors';
 import { useColorScheme } from '../../components/useColorScheme';
@@ -16,7 +16,6 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
-  // Функция для открытия сайта КГУ
   const openKSUWebsite = () => {
     Linking.openURL('https://kursksu.ru/');
   };
@@ -25,7 +24,6 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme].tint,
-        // Отключение заголовка для экранов в таб-навигаторе
         headerShown: useClientOnlyValue(false, true),
       }}>
       <Tabs.Screen
@@ -57,9 +55,7 @@ export default function TabLayout() {
         }}
         listeners={{
           tabPress: (e: { preventDefault: () => void }) => {
-            // Предотвращаем стандартное поведение навигации
             e.preventDefault();
-            // Открываем сайт КГУ
             openKSUWebsite();
           },
         }}

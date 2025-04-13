@@ -1,4 +1,4 @@
-import { executeQuery, executeUpdate, withTransaction } from './databaseService';
+import { executeQuery, executeUpdate } from './databaseService';
 
 export type UserProfile = {
   id: number;
@@ -10,7 +10,6 @@ export type UserProfile = {
 };
 
 export const profileService = {
-  // Получить профиль пользователя
   getProfile: async (): Promise<UserProfile | null> => {
     try {
       const profiles = await executeQuery<UserProfile>('SELECT * FROM profile LIMIT 1');
@@ -21,13 +20,11 @@ export const profileService = {
     }
   },
 
-  // Сохранить или обновить профиль пользователя
   saveProfile: async (profile: Omit<UserProfile, 'id'>): Promise<UserProfile> => {
     try {
       const existingProfile = await profileService.getProfile();
       
       if (existingProfile) {
-        // Обновляем существующий профиль
         await executeUpdate(
           `UPDATE profile SET 
             lastName = ?, 
@@ -47,7 +44,6 @@ export const profileService = {
         
         return { ...profile, id: 1 };
       } else {
-        // Создаем новый профиль
         await executeUpdate(
           `INSERT INTO profile (id, lastName, firstName, middleName, birthDate, groupNumber) 
            VALUES (1, ?, ?, ?, ?, ?)`,
@@ -67,4 +63,4 @@ export const profileService = {
       throw new Error('Не удалось сохранить профиль пользователя');
     }
   }
-}; 
+};
