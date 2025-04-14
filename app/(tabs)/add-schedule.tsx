@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, View as RNView } from 'react-native';
-import { Text, View } from 'react-native';
+import {Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, View } from 'react-native';
 import { router } from 'expo-router';
 import { scheduleService } from '../../services/scheduleService';
 import { debugQueryAllTables } from '../../services/databaseService';
@@ -106,7 +105,7 @@ export default function AddSchedulePage() {
         
         <View style={styles.inputGroup}>
           <Text style={styles.label}>День недели</Text>
-          <RNView style={styles.dayButtonsContainer}>
+          <View style={styles.dayButtonsContainer}>
             {WEEKDAYS.map((day) => (
               <TouchableOpacity
                 key={day}
@@ -127,7 +126,7 @@ export default function AddSchedulePage() {
                 </Text>
               </TouchableOpacity>
             ))}
-          </RNView>
+          </View>
           <Text style={styles.selectedDay}>
             {scheduleItem.dayOfWeek ? `Выбран: ${scheduleItem.dayOfWeek}` : 'Выберите день недели'}
           </Text>
@@ -135,7 +134,7 @@ export default function AddSchedulePage() {
         
         <View style={styles.inputGroup}>
           <Text style={styles.label}>Тип занятия</Text>
-          <RNView style={styles.typeButtonsContainer}>
+          <View style={styles.typeButtonsContainer}>
             {LESSON_TYPES.map((type) => (
               <TouchableOpacity
                 key={type}
@@ -156,7 +155,7 @@ export default function AddSchedulePage() {
                 </Text>
               </TouchableOpacity>
             ))}
-          </RNView>
+          </View>
           <Text style={styles.selectedType}>
             {scheduleItem.lessonType ? `Выбран: ${scheduleItem.lessonType}` : 'Выберите тип занятия'}
           </Text>

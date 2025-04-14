@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
-import { Text, View } from 'react-native';
+import {  Text, View , StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { profileService } from '../../services/profileService';
 
 export default function ProfilePage() {

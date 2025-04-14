@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
-import { StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { scheduleService, ScheduleItem } from '../../services/scheduleService';
